@@ -17,14 +17,14 @@ class Assistant:
         self.folder = folder
 
     def create(self, assistant_id="deadbeef", name="Helpful Assistant",
-               instructions="You are an assistant"):
+               instructions="You are an assistant", model="gpt-4-1106-preview"):
         try:
             assistant = self.client.beta.assistants.retrieve(assistant_id=assistant_id)
         except openai.NotFoundError as e:
             assistant = self.client.beta.assistants.create(
                 name=name,
                 instructions=instructions,
-                model="gpt-4-1106-preview"
+                model=model
             )
 
         self.assistant_id = assistant.id
@@ -122,9 +122,7 @@ class Assistant:
         # Increment the suffix until an unused name is found
         while os.path.exists(os.path.join(self.folder, f"{base_name}_{counter}{extension}")):
             counter += 1
-
         new_file_path = os.path.join(self.folder, f"{base_name}_{counter}{extension}")
-
         return new_file_path
 
     def save_last_message_to_file(self, messages: [], filename: str):
