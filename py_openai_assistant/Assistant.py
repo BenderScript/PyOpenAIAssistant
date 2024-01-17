@@ -110,7 +110,6 @@ class Assistant:
 
     def get_response(self, thread):
         messages = self.client.beta.threads.messages.list(thread_id=thread.id, order="asc")
-        # show_json(messages)
         return messages
 
     def _get_filename_with_incrementing_suffix(self, base_file_name):
@@ -128,10 +127,13 @@ class Assistant:
 
         return new_file_path
 
-    def save_last_message_to_file(self, messages, filename):
+    def save_last_message_to_file(self, messages: [], filename: str):
         if not os.path.exists(self.folder):
             os.makedirs(self.folder)
         filepath = self._get_filename_with_incrementing_suffix(filename)
-        with open(filepath, 'w', encoding='utf-8') as file:
-            file.write(f'{messages.data[-1].content[0].text.value}\n')
-            file.close()
+        if len(messages) == 0:
+            print(f"No message to save")
+        else:
+            with open(filepath, 'w', encoding='utf-8') as file:
+                file.write(f'{messages.data[-1].content[0].text.value}\n')
+                file.close()
