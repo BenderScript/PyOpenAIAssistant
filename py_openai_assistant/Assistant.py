@@ -114,8 +114,6 @@ class Assistant:
         return messages
 
     def _get_filename_with_incrementing_suffix(self, base_file_name):
-        if not os.path.exists(self.data_folder):
-            os.makedirs(self.data_folder)
 
         base_name, extension = os.path.splitext(base_file_name)
         counter = 1
@@ -130,7 +128,7 @@ class Assistant:
         if not os.path.exists(self.data_folder):
             os.makedirs(self.data_folder)
         filepath = self._get_filename_with_incrementing_suffix(filename)
-        if len(messages) == 0:
+        if len(messages.data) == 0:
             print(f"No message to save")
         else:
             with open(filepath, 'w', encoding='utf-8') as file:
