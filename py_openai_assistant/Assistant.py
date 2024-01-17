@@ -6,16 +6,17 @@ from colorama import Fore, Style
 
 
 class Assistant:
-    def __init__(self, client=None, folder="./text_data"):
-        if client is None:
-            openai.api_key = os.getenv("OPENAI_API_KEY")
-            self.client = openai.Client()
-        else:
+    def __init__(self, client=None, api_key=None, folder="./text_data"):
+        if client:
             self.client = client
+        elif api_key:
+            self.client = openai.Client(api_key=api_key)
+        else:
+            raise ValueError("client or key must not be None")
         self.assistant_id = None
         self.folder = folder
 
-    def create(self, assistant_name, assistant_id="deadbeef", name="Helpful Assistant",
+    def create(self, assistant_id="deadbeef", name="Helpful Assistant",
                instructions="You are an assistant"):
         try:
             assistant = self.client.beta.assistants.retrieve(assistant_id=assistant_id)
