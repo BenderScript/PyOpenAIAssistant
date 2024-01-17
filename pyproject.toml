@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py_openai_assistant"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["BenderScript <6779302+BenderScript@users.noreply.github.com>"]
 readme = "README.md"

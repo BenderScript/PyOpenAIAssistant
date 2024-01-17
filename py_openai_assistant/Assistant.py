@@ -15,7 +15,8 @@ class Assistant:
         self.assistant_id = None
         self.folder = folder
 
-    def create_assistant(self, assistant_name, assistant_id="deadbeef", name="Helpful Assistant", instructions="You are an assistant."):
+    def create(self, assistant_name, assistant_id="deadbeef", name="Helpful Assistant",
+               instructions="You are an assistant"):
         try:
             assistant = self.client.beta.assistants.retrieve(assistant_id=assistant_id)
         except openai.NotFoundError as e:
@@ -39,14 +40,14 @@ class Assistant:
         except Exception as e:
             print("Error:", e)
 
-    def delete_assistant_by_id(self, assistant_id):
+    def delete_by_id(self, assistant_id):
         try:
             self.client.beta.assistants.delete(assistant_id)
             print(f"Assistant with ID {assistant_id} has been deleted.")
         except Exception as e:
             print("Error:", e)
 
-    def delete_assistant_by_name(self, name):
+    def delete_by_name(self, name):
         try:
             assistants = self.client.beta.assistants.list()
             for assistant in assistants.data:
@@ -57,7 +58,7 @@ class Assistant:
         except Exception as e:
             print("Error:", e)
 
-    def get_assistant_by_name(self, name):
+    def get_by_name(self, name):
         matching_assistants = []
         try:
             assistants = self.client.beta.assistants.list()

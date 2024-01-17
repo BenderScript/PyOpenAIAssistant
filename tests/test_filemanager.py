@@ -18,7 +18,7 @@ class TestFileManager(unittest.TestCase):
 
         # Initialize Assistant and FileManager with the path to the temporary .env file
         cls.assistant = Assistant()
-        cls.assistant.create_assistant("Test Assistant")
+        cls.assistant.create("Test Assistant")
         cls.file_manager = FileManager(cls.assistant)
 
     @classmethod
@@ -26,7 +26,7 @@ class TestFileManager(unittest.TestCase):
         # Remove the temporary .env file
         cls.file_manager.file_db.clear()
         cls.file_manager.file_db.close()
-        cls.assistant.delete_assistant_by_id(cls.assistant.assistant_id)
+        cls.assistant.delete_by_id(cls.assistant.assistant_id)
 
     def test_upload_file(self):
         # Create a temporary file to upload
