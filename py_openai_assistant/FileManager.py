@@ -4,9 +4,9 @@ from openai.types.beta import Assistant
 
 
 class FileManager:
-    def __init__(self, assistant: Assistant, folder="./text_data"):
+    def __init__(self, assistant: Assistant, data_folder="./text_data"):
         self.assistant = assistant
-        self.folder = folder
+        self.data_folder = data_folder
         self.file_db = shelve.open("files", writeback=True, flag = "n")
 
     def calculate_file_hash(self, filepath):

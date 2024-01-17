@@ -1,3 +1,4 @@
+import os
 import unittest
 import openai
 from py_openai_assistant.Assistant import Assistant
@@ -9,12 +10,10 @@ class TestAssistant(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Initialize the Assistant class
-        cls.assistant = Assistant()
+        cls.assistant = Assistant(api_key=os.getenv("OPENAI_API_KEY"))
 
     @classmethod
     def tearDownClass(cls):
-        cls.assistant.delete_by_name("Test Assistant")
-        # Remove the temporary .env file
         cls.assistant.delete_by_id(cls.assistant.assistant_id)
 
     def test_create_assistant(self):
@@ -50,8 +49,8 @@ class TestAssistant(unittest.TestCase):
         self.assistant.create(name)
 
         # Test the delete_assistant_by_name method
-        self.assistant.delete_by_name("Test Assistant for Deletion by Name")
-        self.assertFalse(self.assistant.get_by_name("Test Assistant for Deletion by Name"))
+        self.assistant.delete_by_name(name)
+        self.assertFalse(self.assistant.get_by_name(name))
 
 
 if __name__ == '__main__':

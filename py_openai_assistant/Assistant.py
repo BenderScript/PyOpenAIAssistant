@@ -6,7 +6,7 @@ from colorama import Fore, Style
 
 
 class Assistant:
-    def __init__(self, client=None, api_key=None, folder="./text_data"):
+    def __init__(self, client=None, api_key=None, data_folder="./text_data"):
         if client:
             self.client = client
         elif api_key:
@@ -14,11 +14,12 @@ class Assistant:
         else:
             raise ValueError("client or key must not be None")
         self.assistant_id = None
-        self.folder = folder
+        self.data_folder = data_folder
 
     def create(self, assistant_id="deadbeef", name="Helpful Assistant",
                instructions="You are an assistant", model="gpt-4-1106-preview"):
         try:
+            # try to reuse an assistant
             assistant = self.client.beta.assistants.retrieve(assistant_id=assistant_id)
         except openai.NotFoundError as e:
             assistant = self.client.beta.assistants.create(
@@ -113,21 +114,21 @@ class Assistant:
         return messages
 
     def _get_filename_with_incrementing_suffix(self, base_file_name):
-        if not os.path.exists(self.folder):
-            os.makedirs(self.folder)
+        if not os.path.exists(self.data_folder):
+            os.makedirs(self.data_folder)
 
         base_name, extension = os.path.splitext(base_file_name)
         counter = 1
 
         # Increment the suffix until an unused name is found
-        while os.path.exists(os.path.join(self.folder, f"{base_name}_{counter}{extension}")):
+        while os.path.exists(os.path.join(self.data_folder, f"{base_name}_{counter}{extension}")):
             counter += 1
-        new_file_path = os.path.join(self.folder, f"{base_name}_{counter}{extension}")
+        new_file_path = os.path.join(self.data_folder, f"{base_name}_{counter}{extension}")
         return new_file_path
 
     def save_last_message_to_file(self, messages: [], filename: str):
-        if not os.path.exists(self.folder):
-            os.makedirs(self.folder)
+        if not os.path.exists(self.data_folder):
+            os.makedirs(self.data_folder)
         filepath = self._get_filename_with_incrementing_suffix(filename)
         if len(messages) == 0:
             print(f"No message to save")
@@ -135,3 +136,4 @@ class Assistant:
             with open(filepath, 'w', encoding='utf-8') as file:
                 file.write(f'{messages.data[-1].content[0].text.value}\n')
                 file.close()
+                return filepath
